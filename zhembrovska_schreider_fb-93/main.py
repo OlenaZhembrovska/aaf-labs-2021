@@ -12,7 +12,8 @@ def menu(title_arr, elem_mas, command):
         - Delete title  
         - Delete line
         - Delete element
-        - Print
+        - Print table
+        - Print line
         - Exit
     """)
         alpf ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -54,8 +55,13 @@ def menu(title_arr, elem_mas, command):
                     #tab.print_table(tab, title_arr,elem_mas)
                     break    
                 elif re.match(r'^[Pp][Rr][Ii][Nn][Tt]', word_mas[0]):
-                    tab.print_table(tab, title_arr,elem_mas)
-                    break
+                    if re.match(r'^[Tt][Aa][Bb][Ll][Ee]', word_mas[1]):
+                        tab.print_table(tab, title_arr,elem_mas)
+                        break
+                    elif re.match(r'^[Ll][Ii][Nn][Ee]', word_mas[1]):
+                        line_numb = word_mas[2]
+                        tab.print_line(elem_mas, line_numb)
+                        break
                 elif re.match(r'^[Ee][Xx][Ii][Tt]', word_mas[0]):
                     return 'x'
                 else:

@@ -1,5 +1,8 @@
 #from main import 
 
+from re import L
+
+
 class Table:
     name = ''
     titles = []
@@ -21,6 +24,16 @@ class Table:
     def delete_title(arr):
         delete_index = int(input("Which title do you want to delete? \n"))
         arr[delete_index] = '____'
+
+    def print_colums(titles_arr, element_mas, name_colums):
+        x = int(name_colums) - 1
+        
+
+    def print_line(mas, number):
+        x = int(number) - 1
+        for y in range(0, len(mas[x])):  
+            print('|    ' + mas[x][y], end = '    ')
+        print( ' |')
 
 
 
