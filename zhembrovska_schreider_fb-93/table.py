@@ -12,8 +12,6 @@ class Table:
                 if element == element_mas[x][y]:
                     self.print_line(element_mas, x)
                 
-
-
     def print_name(table_name):
         name = table_name
         print(table_name)
