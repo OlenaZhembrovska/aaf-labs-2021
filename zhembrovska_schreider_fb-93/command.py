@@ -1,13 +1,10 @@
 import re
-from  table import Table
-from command import menu
+from table import Table
+import main
 
-def separation(n):
-            print("-" * n)
+tab = Table
 
-'''def menu(title_arr, elem_mas, command):
-    
-        
+def menu(title_arr, elem_mas, command):  
 
         menu_choice = input("""
         - Create_table
@@ -27,10 +24,15 @@ def separation(n):
         
         for i in alpf :
                 word_mas = re.findall(r'[0-9A-Za-z.]+', menu_choice)
-                if re.match(r'^[Cc][Rr][Ee][Aa][Tt][Ee][_][Tt][Aa][Bb][Ll][Ee]', word_mas[0]):
-                    table_name = word_mas[1]
-                    tab.print_name(table_name)
-                    break
+                if re.match(r'^[Cc][Rr][Ee][Aa][Tt][Ee]', word_mas[0]):
+                  if re.match(r'^[Tt][Aa][Bb][Ll][Ee]', word_mas[1]):  
+                    table_name = word_mas[2]
+                    if re.match(r'^[Ww][Ii][Tt][Hh]', word_mas[3]):
+                        #tab.print_name(table_name)
+                        colums = word_mas[4:]
+                        print(table_name)
+                        print(colums)
+                        break
                 elif re.match(r'^[Aa][Dd][Dd]', word_mas[0]):
                     if re.match(r'^[Tt][Ii][Tt][Ll][Ee]', word_mas[1]):
                         new_title = word_mas[2]
@@ -88,24 +90,3 @@ def separation(n):
                 else:
                     print("Uncorrect enter !!! \n")
                     break
-'''#.............................................................................
-tab = Table
-tab.name = 'friends'
-tab.titles = ['name ','surname','birth']
-tab.elements = [['Aseya','Sernova','19.12'],
-                ['Lesha','Siedykh', '02.03'],
-                ['Vadym','Atamank', '12.05'],
-                ['Gulia','Klassna', '06.01'],
-                ['Tanya','Malanya', '03.01'],
-                ['Vicky','Leshena', '21.11'],
-                ['Aleks','Murguls', '19.11']] 
-
-command = ' '
-while command != 'x':
-    command = menu(tab.titles, tab.elements, command)
-    separation(60)
-
-                        
-
-
- 
