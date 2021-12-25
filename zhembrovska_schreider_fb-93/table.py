@@ -9,6 +9,7 @@ class Table:
         self.trees = {}
         self.index = 0
 
+
     def create(self, data):
         name, columns = data[0], data[1]
         self.table_name = name
@@ -47,6 +48,7 @@ class Table:
                         if conditions[cond][1] == '=':
                             x = (self.trees[conditions[cond][0]].searchTree(conditions[cond][-1])).index
                             cond_index.append(x)
+
 
                     if len(conditions) == 1:
                         self.select_one(cond_index,columns)

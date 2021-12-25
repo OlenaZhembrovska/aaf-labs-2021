@@ -23,7 +23,6 @@ def menu():
         except:
             print('ups. error(')
 
-menu()
 
 
  
