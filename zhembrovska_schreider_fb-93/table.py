@@ -1,64 +1,117 @@
-#from main 
-import re
+from tree import *
+from prettytable import PrettyTable
 
 class Table:
-    name = ''
-    titles = []
-    elements = []
+    def __init__(self):
+        self.table_name = None
+        self.columns = None
+        self.rows = {}
+        self.trees = {}
+        self.index = 0
 
-    def compare(self, element_mas, element):
-        for x in range(0, len(element_mas)): 
-            for y in range(0, len(element_mas[x])): 
-                if element == element_mas[x][y]:
-                    self.print_line(element_mas, x)
-                
+    def create(self, data):
+        name, columns = data[0], data[1]
+        self.table_name = name
+        self.columns = list(columns.keys())
+        for column_name in columns.keys():
+            if columns[column_name]:
+                self.trees[column_name] = RedBlackTree()
+        print('table was created')
 
+    def insert(self, data):
+        tname = data[0]
+        row = data[1]
+        if self.table_name != tname or self.table_name == None:
+            print('there is no table called ', tname)
+        elif(len(self.columns) != len(row)):
+            print('wrong number of argumments')
+        else:
+            for i in range(len(row)):
+                if self.columns[i] in self.trees.keys():
+                    self.trees[self.columns[i]].insert(row[i], self.index)
+            self.rows[self.index] = row
+            self.index += 1
+            print('data was inserted')
 
-    def print_name(table_name):
-        name = table_name
-        print(table_name)
+    def select(self, data):
+        tname, columns, conditions, relations = data[0],data[1],data[2], data[3]
+        if self.table_name != tname or self.table_name == None:
+            print('there is no table called ', tname)
+        else:
+            if len(self.rows) != 0:
+                if len(conditions) == 0:
+                    self.select_zero(columns)
+                else:
+                    cond_index = []
+                    for cond in range(len(conditions)):
+                        if conditions[cond][1] == '=':
+                            x = (self.trees[conditions[cond][0]].searchTree(conditions[cond][-1])).index
+                            cond_index.append(x)
 
-    def add_new_title(titles, new_title):
-        titles.append(new_title)
+                    if len(conditions) == 1:
+                        self.select_one(cond_index,columns)
 
-    def delete_title(arr, index):
-        delete_index = int(index) + 1
-        arr[delete_index] = '____'
+            else: print('there is no such value in the table')
 
-    def print_colums(titles_arr, element_mas, name_colums):
-        x = int(name_colums) - 1
-        
+    def select_zero(self, columns):
+        t = PrettyTable()
+        if columns[0] == '*':
+            t.field_names = self.columns
+            for i in self.rows:
+                t.add_row(self.rows[i])
+        else:
+            c, r = [], []
+            for col in columns:
+                c.append(col)
+            t.field_names = c
+            for i in self.rows.keys():
+                r = []
+                for col in columns:
+                    ind = self.columns.index(col)
+                    r.append(self.rows[i][ind])
+                t.add_row(r)
+        print(t)
 
-    def print_line(mas, x):
-        for y in range(0, len(mas[x])):  
-            print('|    ' + mas[x][y], end = '    ')
-        print( ' |')
+    def select_one(self, cond_index, columns):
+        t = PrettyTable()
+        index = cond_index[0]
+        if columns[0] == '*':
+            t.field_names = self.columns
+            t.add_row(self.rows[index])
+        else:
+            c, r = [], []
+            for col in columns:
+                c.append(col)
+                i = self.columns.index(col)
+                r.append(self.rows[index][i])
+            t.field_names = c
+            t.add_row(r)
+        print(t)
 
-    def print_dblarr(mas):       
-        for x in range(0, len(mas)):
-            print( x+1 , end = ' ' )    
-            for y in range(0, len(mas[x])): 
-                print('|    ' + mas[x][y], end = '    ')
-            print( ' |') 
+    def delete(self, data):
+        if self.table_name != data[0] or self.table_name == None:
+            print('there is no table called ', data[0])
+        else:
+            if len(data) == 1:
+                self.rows = {}
+                self.columns = []
+                self.trees = {}
+                self.index = 0
+                print('data was deleted')
+            else:
+                column, operator, value = data[1],data[2], data[3]
+                todelete = self.trees[column].searchTree(value)
+                if todelete.data == 0:
+                    print('there is no such value in the table')
+                else:
+                    self.trees[column].delete_node(todelete.data)
+                    self.rows.pop(todelete.index)
+                    print('data was deleted')
 
-    def print_table(self, titles_arr, elements_mas):
-        print("№ |    "+('    |    '.join(titles_arr)) + '    |')
-        #self.separation(40)
-        print("-" * 60)
-        self.print_dblarr(elements_mas)
-        
-    def add_elem_line(elements_mas, line):
-        elements_mas.append(line)
-
-
-    def delete_elem_line(elements_mas, delete_index):
-        x = int(delete_index) - 1
-        if x in range(0,len(elements_mas)):    
-            del elements_mas[x]
-        else: 
-         print('No line with № ' + delete_index)    
-
-    def change_element(elements_mas, element, line, index):
-        x = int(line) - 1
-        y = int(index) - 1
-        elements_mas[x][y] = element
+    def print_table(self):
+        print(self.table_name)
+        t = PrettyTable()
+        t.field_names = self.columns
+        for i in self.rows:
+            t.add_row(self.rows[i])
+        print(t)
